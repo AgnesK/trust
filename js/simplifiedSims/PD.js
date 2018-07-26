@@ -114,6 +114,8 @@ function Logic_tft(){
 		otherMove = other;
 	};
 }
+strategies.tft = Logic_tft;
+
 
 function Logic_tf2t(){
 	var self = this;
@@ -133,6 +135,7 @@ function Logic_tf2t(){
 		}
 	};
 }
+strategies.tf2t = Logic_tf2t;
 
 function Logic_grudge(){
 	var self = this;
@@ -145,6 +148,7 @@ function Logic_grudge(){
 		if(other==PD.CHEAT) everCheatedMe=true;
 	};
 }
+strategies.grudge = Logic_grudge;
 
 function Logic_all_d(){
 	var self = this;
@@ -155,7 +159,7 @@ function Logic_all_d(){
 		// nah
 	};
 }
-strategies.all_d = Logic_all_d
+strategies.all_d = Logic_all_d;
 
 function Logic_all_c(){
 	var self = this;
@@ -166,7 +170,7 @@ function Logic_all_c(){
 		// nah
 	};
 }
-strategies.all_c = Logic_all_c
+strategies.all_c = Logic_all_c;
 
 function Logic_random(){
 	var self = this;
@@ -177,6 +181,7 @@ function Logic_random(){
 		// nah
 	};
 }
+strategies.random = Logic_random;
 
 // Start off Cooperating
 // Then, if opponent cooperated, repeat past move. otherwise, switch.
@@ -191,6 +196,7 @@ function Logic_pavlov(){
 		if(other==PD.CHEAT) myLastMove = ((myLastMove==PD.COOPERATE) ? PD.CHEAT : PD.COOPERATE); // switch!
 	};
 }
+strategies.pavlov = Logic_pavlov;
 
 // TEST by Cooperate | Cheat | Cooperate | Cooperate
 // If EVER retaliates, keep playing TFT
@@ -224,6 +230,7 @@ function Logic_prober(){
 	};
 
 }
+strategies.prober = Logic_prober;
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////

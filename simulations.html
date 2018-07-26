@@ -1,0 +1,56 @@
+<!doctype>
+<html>
+<body>
+	<div id="main">
+		<div id="simulation">
+			<select id="player1">
+				<option value="all_c">all_c</option>
+				<option value="all_d">all_d</option>
+			</select>
+			<select id="player2">
+				<option value="all_c">all_c</option>
+				<option value="all_d">all_d</option>
+			</select>
+			<br/>
+			<button onclick='PD.playOneGame(
+			    document.getElementById("player1").value,
+				document.getElementById("player2").value)'>
+				Click me to start the simulation
+			</button>
+			<div id="result" />
+		</div>
+	</div>
+</body>
+</html>
+
+<!-- Libraries -->
+<script src="js/lib/helpers.js?v11"></script>
+<script src="js/lib/pegasus.js?v11"></script>
+<script>var c_ = {};</script>
+<script src="js/lib/minpubsub.src.js?v11"></script>
+<script src="js/lib/q.js?v11"></script>
+<script src="js/lib/pixi.min.js?v11"></script>
+<script src="js/lib/howler.js?v11"></script>
+<script>var createjs = window;</script>
+<script src="js/lib/tweenjs-0.6.2.min.js?v11"></script>
+<script>Ticker.framerate=60; Ticker.paused=true;</script>
+
+<!-- Core Engine -->
+<script src="js/core/Loader.js?v11"></script>
+<script src="js/core/Slideshow.js?v11"></script>
+<script src="js/core/SlideSelect.js?v11"></script>
+<script src="js/core/Button.js?v11"></script>
+<script src="js/core/TextBox.js?v11"></script>
+<script src="js/core/Words.js?v11"></script>
+<script src="js/core/IncDecNumber.js?v11"></script>
+<script src="js/core/Slider.js?v11"></script>
+<script src="js/core/Scratcher.js?v11"></script>
+<script src="js/core/Background.js?v11"></script>
+<script src="js/core/ImageBox.js?v11"></script>
+<script src="js/core/PayoffsUI.js?v11"></script>
+
+<!-- Simulations -->
+<script src="js/simplifiedSims/PD.js?v11"></script>
+
+<!-- Main Code -->
+<script src="js/main.js?v11"></script>

@@ -93,52 +93,6 @@ PD.playOneTournament = function(agents, turns){
 
 const strategies = {};
 
-function Logic_tft(){
-	var self = this;
-	var otherMove = PD.COOPERATE;
-	self.play = function(){
-		return otherMove;
-	};
-	self.remember = function(own, other){
-		otherMove = other;
-	};
-}
-strategies.tft = Logic_tft;
-
-
-function Logic_tf2t(){
-	var self = this;
-	var howManyTimesCheated = 0;
-	self.play = function(){
-		if(howManyTimesCheated>=2){
-			return PD.CHEAT; // retaliate ONLY after two betrayals
-		}else{
-			return PD.COOPERATE;
-		}
-	};
-	self.remember = function(own, other){
-		if(other==PD.CHEAT){
-			howManyTimesCheated++;
-		}else{
-			howManyTimesCheated = 0;
-		}
-	};
-}
-strategies.tf2t = Logic_tf2t;
-
-function Logic_grudge(){
-	var self = this;
-	var everCheatedMe = false;
-	self.play = function(){
-		if(everCheatedMe) return PD.CHEAT;
-		return PD.COOPERATE;
-	};
-	self.remember = function(own, other){
-		if(other==PD.CHEAT) everCheatedMe=true;
-	};
-}
-strategies.grudge = Logic_grudge;
-
 function Logic_all_d(){
 	var self = this;
 	self.play = function(){
@@ -172,55 +126,30 @@ function Logic_random(){
 }
 strategies.random = Logic_random;
 
-// Start off Cooperating
-// Then, if opponent cooperated, repeat past move. otherwise, switch.
-function Logic_pavlov(){
-	var self = this;
-	var myLastMove = PD.COOPERATE;
-	self.play = function(){
-		return myLastMove;
-	};
-	self.remember = function(own, other){
-		myLastMove = own; // remember MISTAKEN move
-		if(other==PD.CHEAT) myLastMove = ((myLastMove==PD.COOPERATE) ? PD.CHEAT : PD.COOPERATE); // switch!
-	};
+function Logic_tft(){
+    var self = this;
+    var otherMove = PD.COOPERATE;
+    self.play = function(){
+        return otherMove;
+    };
+    self.remember = function(own, other){
+        otherMove = other;
+    };
 }
-strategies.pavlov = Logic_pavlov;
+strategies.tft = Logic_tft;
 
-// TEST by Cooperate | Cheat | Cooperate | Cooperate
-// If EVER retaliates, keep playing TFT
-// If NEVER retaliates, switch to ALWAYS DEFECT
-function Logic_prober(){
-
-	var self = this;
-
-	var moves = [PD.COOPERATE, PD.CHEAT, PD.COOPERATE, PD.COOPERATE];
-	var everCheatedMe = false;
-
-	var otherMove = PD.COOPERATE;
-	self.play = function(){
-		if(moves.length>0){
-			// Testing phase
-			var move = moves.shift();
-			return move;
-		}else{
-			if(everCheatedMe){
-				return otherMove; // TFT
-			}else{
-				return PD.CHEAT; // Always Cheat
-			}
-		}
-	};
-	self.remember = function(own, other){
-		if(moves.length>0){
-			if(other==PD.CHEAT) everCheatedMe=true; // Testing phase: ever retaliated?
-		}
-		otherMove = other; // for TFT
-	};
-
+function Logic_grudge(){
+    var self = this;
+    var everCheatedMe = false;
+    self.play = function(){
+        if(everCheatedMe) return PD.CHEAT;
+        return PD.COOPERATE;
+    };
+    self.remember = function(own, other){
+        if(other==PD.CHEAT) everCheatedMe=true;
+    };
 }
-strategies.prober = Logic_prober;
-console.log(strategies)
+strategies.grudge = Logic_grudge;
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////

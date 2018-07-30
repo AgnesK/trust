@@ -19,10 +19,7 @@ PD.getPayoffs = function(move1, move2){
 	if(move1==PD.COOPERATE && move2==PD.COOPERATE) return [payoffs.R, payoffs.R]; // both rewarded
 };
 
-PD.playOneGame = function(strategyA, strategyB){
-
-    var playerA = new player(strategyA);
-    var playerB = new player(strategyB);
+PD.playOneGame = function(playerA, playerB){
 
 	// Make your moves!
 	var A = playerA.play();
@@ -32,24 +29,19 @@ PD.playOneGame = function(strategyA, strategyB){
 	var payoffs = PD.getPayoffs(A,B);
 
 	// // Remember own & other's moves (or mistakes)
-	// playerA.remember(A, B);
-	// playerB.remember(B, A);
-
-	// Add to scores (only in tournament?)
-	// playerA.addPayoff(payoffs[0]);
-	// playerB.addPayoff(payoffs[1]);
+	playerA.remember(A, B);
+	playerB.remember(B, A);
 
 	// Return the payoffs...
-	console.log(payoffs)
-    document.getElementById("result").innerHTML = payoffs;
 	return payoffs;
+
 };
 
-PD.playRepeatedGame = function(playerA, playerB, turns){
+PD.playRepeatedGame = function(strategyA, strategyB, turns){
 
 	// I've never met you before, let's pretend
-	playerA.resetLogic();
-	playerB.resetLogic();
+    var playerA = new Player(strategyA);
+    var playerB = new Player(strategyB);
 
 	// Play N turns
 	var scores = {
@@ -59,33 +51,46 @@ PD.playRepeatedGame = function(playerA, playerB, turns){
 	};
 	for(var i=0; i<turns; i++){
 		var p = PD.playOneGame(playerA, playerB);
+		console.log(p);
 		scores.payoffs.push(p);
 		scores.totalA += p[0];
 		scores.totalB += p[1];
 	}
 
 	// Return the scores...
-	return scores;
+    console.log(scores);
+    document.getElementById("result").innerHTML = `score player A: ${scores.totalA}, score player B: ${scores.totalB}`;
+    return scores;
 
 };
 
-PD.playOneTournament = function(agents, turns){
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 
-	// Reset everyone's coins
-	for(var i=0; i<agents.length; i++){
-		agents[i].resetCoins();
-	}
+function Player(strategy) {
 
-	// Round robin!
-	for(var i=0; i<agents.length; i++){
-		var playerA = agents[i];
-		for(var j=i+1; j<agents.length; j++){
-			var playerB = agents[j];
-			PD.playRepeatedGame(playerA, playerB, turns);
-		}	
-	}
+    var self = this;
+    self.strategyName = strategy;
 
-};
+    // Number of coins
+    self.coins = 0;
+    self.addPayoff = function (payoff) {
+        self.coins += payoff;
+        self.updateScore();
+    };
+
+    // What's the play logic?
+    const LogicClass = strategies[self.strategyName];
+    self.logic = new LogicClass();
+    self.play = function () {
+        return self.logic.play();
+    };
+    self.remember = function (own, other) {
+        self.logic.remember(own, other);
+    };
+
+}
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -150,30 +155,3 @@ function Logic_grudge(){
     };
 }
 strategies.grudge = Logic_grudge;
-
-///////////////////////////////////////////////////////
-///////////////////////////////////////////////////////
-///////////////////////////////////////////////////////
-
-function player(strategy) {
-
-    var self = this;
-    self.strategyName = strategy;
-
-    // Number of coins
-    self.coins = 0;
-    self.addPayoff = function (payoff) {
-        self.coins += payoff;
-        self.updateScore();
-    };
-
-    // What's the play logic?
-    const LogicClass = strategies[self.strategyName];
-    self.logic = new LogicClass();
-    self.play = function () {
-        return self.logic.play();
-    };
-    self.remember = function (own, other) {
-        self.logic.remember(own, other);
-    };
-}
